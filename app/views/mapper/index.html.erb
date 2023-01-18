@@ -1,13 +1,18 @@
 <div data-controller="mapper" class="text-slate-100 font-righteous">
   <div class="flex w-full justify-center py-4">
-    <h1 class="font-bold text-6xl">Mapper</h1>
+    <h1 class="font-bold text-6xl">Canvas</h1>
   </div>
   <div class="flex gap-4 mb-4">
-    <canvas id="canvas" width="500" height="400" data-mapper-target="canvas"
+    <canvas id="canvas" data-mapper-target="canvas"
       class="bg-slate-100 border border-bold border-slate-900">
-    </canvas>
-    <div class="flex flex-col gap-2">
-      <button class="btn-yellow" data-action="mapper#drawLine">Line</button>
-    </div>
+    </canvas>  
+  </div>
+  <div class="flex w-full justify-center gap-2">
+    <button class="btn-green" data-action="mapper#drawBubbles">Paint</button>
+    <button class="btn-green" data-action="mapper#randomCircles">Bubbles</button>
+    <button class="btn-green" data-action="mapper#movingCircle">DVD</button>
+    <button class="btn-green" data-action="mapper#manyCircles">Circles</button>
+    <button class="btn-green" data-action="mapper#mouseCircles">Mouse</button>
+    <button class="btn-blue" data-action="mapper#clear">Clear</button>
   </div>
 </div>
