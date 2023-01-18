@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_18_022631) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_18_022945) do
+  create_table "nodes", force: :cascade do |t|
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "plugboards", force: :cascade do |t|
     t.string "label"
     t.string "group"
@@ -20,6 +26,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_022631) do
 
   create_table "plugroutes", force: :cascade do |t|
     t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.string "label"
+    t.string "suite"
+    t.string "shape"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
