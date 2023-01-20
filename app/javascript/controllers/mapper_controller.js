@@ -71,10 +71,10 @@ static targets = [
 
 
   drawBubbles() {
-    for(let i = 0; i < 250; i++) {
+    for(let i = 0; i < 150; i++) {
       let x = Math.random() * window.innerWidth;
       let y = Math.random() * (window.innerHeight * .6);
-      let r = Math.random() * 255;
+      let r = Math.random() * 200;
       let g = Math.random() * 255;
       let b = Math.random() * 255;
       let a = Math.random();
@@ -223,34 +223,50 @@ static targets = [
     var width = this.canvasTarget.width;
     var height = this.canvasTarget.height;
 
+    //offset for distance from top of window to top of canvas, corrects mouse y coordinate
+    let cOffset = window.pageYOffset + this.canvasTarget.getBoundingClientRect().top;
+
+    //mouse tracking and adjustment to canvas coords
     let mouse = {
       x: undefined,
       y: undefined
     }
 
-    //offset for distance from top of window to top of canvas, corrects mouse y coordinate
-    let cOffset = window.pageYOffset + this.canvasTarget.getBoundingClientRect().top;
-    
     window.addEventListener('mousemove',
       function(event) {
         mouse.x = event.x;
         mouse.y = event.y - cOffset;
       })
 
-    function Circle(x, y, dx, dy, radius) {
+    //Circle Object manages itself entirely with calls to update()
+    function Circle(x, y, dx, dy, radius, stroke, fill) {
       this.x = x;
       this.y = y;
       this.dx = dx;
       this.dy = dy;
       this.radius = radius;
+      this.stroke = stroke;
+      this.fill = fill;
 
       this.draw = function() {
         c.beginPath();
         c.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
-        c.strokeStyle = "#dd5512";
-        c.fillStyle = "#efa395";
+        c.strokeStyle = this.stroke;
+        c.fillStyle = this.fill;
         c.stroke();
         c.fill();
+      }
+
+      this.inside = function(width, height) {
+        if(this.x + this.radius + 1 > width)
+          return false;
+        if(this.y + this.radius + 1 > height)
+          return false;
+        if(this.y - (this.radius + 1) < 0)
+          return false;
+        if(this.x - (this.radius + 1) < 0)
+          return false;
+        return true;
       }
 
       this.update = function() {
@@ -264,16 +280,23 @@ static targets = [
         this.y += this.dy;
 
         // interactivity
-        if(Math.sqrt((mouse.x-this.x)*(mouse.x-this.x)+(mouse.y-this.y)*(mouse.y-this.y)) < this.radius) {
+        if(Math.sqrt((mouse.x-this.x)*(mouse.x-this.x)+(mouse.y-this.y)*(mouse.y-this.y)) < this.radius && this.inside(width, height)) {
           this.radius += 1;
         }
-
-
 
         this.draw();
       }
     }
 
+    let randoRgbaTemplate = function() {
+      let r = Math.random() * 255;
+      let g = Math.random() * 255;
+      let b = Math.random() * 255;
+      let a = Math.random();
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    //generating randomized circles
     let randoC = function(w,h) {
       let out = [];
       let speedMult = 3;
@@ -283,14 +306,18 @@ static targets = [
       out.push((Math.random() - 0.5) * speedMult);
       out.push((Math.random() - 0.5) * speedMult);
       out.push(r);
+      out.push(randoRgbaTemplate());
+      out.push(randoRgbaTemplate());
+
       return out;
     }
 
     let circleArray = [];
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < 100; i++) {
       circleArray.push(new Circle(...randoC(width,height)));
     }
 
+    //our actual animate loop
     const animate = function() {
       requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
