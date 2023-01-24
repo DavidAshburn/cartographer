@@ -8,6 +8,7 @@
         <div class="bg-slate-100 z-20 shadow-small min-w-[180px] hidden absolute rounded-b-xl right-5 py-2" data-navbar-target="altdrop">
           <%# link_to "My Profile", home_profile_path, class:"flex ml-2 my-2 hover:text-cyan-600" %>
           <%= link_to "Mapper", mapper_index_path, class:"flex text-zinc-700 hover:text-zinc-500 ml-2 my-2" %>
+          <%= link_to "Dragger", mapper_dragdrop_path, class:"flex text-zinc-700 hover:text-zinc-500 ml-2 my-2" %>
           <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class:"flex text-zinc-700 hover:text-zinc-500 ml-2 my-2" %><br />
           <button class="flex font-monoton text-4xl text-zinc-700 hover:text-zinc-500 absolute right-3 bottom-2" data-action="navbar#hideDropAlt">x</button>
         </div>
@@ -15,6 +16,7 @@
     <div class="flex justify-end items-center">
       <%# link_to "Profile", home_profile_path, class:"px-2.5 py-2 hover:text-cyan-600 hidden sm:flex"%>
       <%= link_to "Mapper", mapper_index_path, class:"hidden sm:flex text-xl text-zinc-700 hover:text-zinc-500 px-2.5 py-2" %>
+      <%= link_to "Dragger", mapper_dragdrop_path, class:"hidden sm:flex text-xl text-zinc-700 hover:text-zinc-500 px-2.5 py-2" %>
       <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class:"hidden sm:flex text-xl text-zinc-700 hover:text-zinc-500 px-2.5 py-2 " %>
     </div>
   </div>

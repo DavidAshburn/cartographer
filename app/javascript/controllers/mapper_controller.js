@@ -53,22 +53,11 @@ static targets = [
     c.fill();
   }
 
-  markings(x) {
-    this.drawSquare(0,0,x);
-    for(let i = x; i < window.innerWidth; i += x) {
-      this.drawLine(i,0,i,10);
-    }
-    for(let j = x; j < window.innerHeight * .6; j += x) {
-      this.drawLine(0,j,10,j);
-    }
-  }
-
   clear() {
     let c = this.canvasTarget.getContext("2d");
     c.beginPath();
     c.clearRect(0,0,this.canvasTarget.width,this.canvasTarget.height);
   }
-
 
   drawBubbles() {
     for(let i = 0; i < 150; i++) {
@@ -87,11 +76,6 @@ static targets = [
       }
     }
   }
-
-  // c.beginPath();
-  // c.arc(200,200,30,0,Math.PI*2,false);
-  // c.strokeStyle = 'blue';
-  // c.stroke();
 
   randomCircles() {
     const c = this.canvasTarget.getContext("2d");
@@ -202,7 +186,7 @@ static targets = [
     }
 
     let circleArray = [];
-    for(let i = 0; i < 100; i++) {
+    for(let i = 0; i < 200; i++) {
       circleArray.push(new Circle(...randoC(width,height)));
     }
 
@@ -297,6 +281,7 @@ static targets = [
     }
 
     //generating randomized circles
+    //creates an array that will get spread out in the Circle call below
     let randoC = function(w,h) {
       let out = [];
       let speedMult = 3;
