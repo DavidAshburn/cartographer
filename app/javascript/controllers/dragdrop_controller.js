@@ -31,6 +31,10 @@ static targets = [
       function(event) {
         mouse.x = event.clientX - rect.left;
         mouse.y = event.clientY - rect.top;
+        if(mouse.x > rect.width)
+          mouse.x = -1;
+        if(mouse.y > rect.height)
+          mouse.y = -1;
       })
 
     ctx.font="48px righteous";
