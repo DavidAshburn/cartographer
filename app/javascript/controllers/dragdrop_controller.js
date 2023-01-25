@@ -38,12 +38,25 @@ static targets = [
       })
 
     ctx.font="48px righteous";
+    ctx.lineWidth = 3;
+    
+    let barX = width * .8;
 
     //our actual animate loop
     const animate = function() {
       requestAnimationFrame(animate);
       ctx.clearRect(0,0,width,height);
 
+
+      ctx.beginPath()
+      ctx.moveTo(barX,0);
+      ctx.lineTo(barX,height);
+      ctx.stroke();
+
+      ctx.fillStyle = "#777777";
+      ctx.fillRect(barX + 2, 0, width * .2, height * .2)
+
+      ctx.fillStyle = "#000000";
       ctx.fillText(`${mouse.x},${mouse.y}`, 10, 50);
     }
     animate();
