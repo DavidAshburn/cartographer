@@ -54,7 +54,7 @@ static targets = [
       })
 
     //Drag and drop Objects
-    function Circle(x,y,label,fill="#0891b2",stroke="#fcd34d") {
+    function Circle(x,y,label="",fill="#0891b2",stroke="#fcd34d") {
       this.x = x;
       this.y = y;
       this.label = label;
@@ -69,9 +69,10 @@ static targets = [
         ctx.fillStyle = this.fill;
         ctx.stroke();
         ctx.fill();
-
-        ctx.font = "24px righteous";
-        ctx.fillText(this.label, this.x + this.radius + 15, this.y + 5);
+        if(label != "") {
+          ctx.font = "24px righteous";
+          ctx.fillText(this.label, this.x + this.radius + 15, this.y + 5);
+        }
       }
       this.update = function() {
         if(this.held) {

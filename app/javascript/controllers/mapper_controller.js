@@ -315,4 +315,107 @@ static targets = [
     animate();
   }
 
+  nervousCircles() {
+    const c = this.canvasTarget.getContext("2d");
+    let width = this.canvasTarget.width;
+    let height = this.canvasTarget.height;
+    let rect = this.canvasTarget.getBoundingClientRect();
+    //mouse tracking and adjustment to canvas coords
+    let mouse = {
+      x: undefined,
+      y: undefined
+    }
+
+    window.addEventListener('mousemove',
+      function(event) {
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;
+        if(mouse.x > rect.width)
+          mouse.x = -1;
+        if(mouse.y > rect.height)
+          mouse.y = -1;
+      })
+
+    //Circle Object manages itself entirely with calls to update()
+    function Circle(x, y, dx, dy, radius, stroke, fill) {
+      this.x = x;
+      this.y = y;
+      this.dx = dx;
+      this.dy = dy;
+      this.radius = radius;
+      this.stroke = stroke;
+      this.fill = fill;
+
+      this.draw = function() {
+        c.beginPath();
+        c.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
+        c.strokeStyle = this.stroke;
+        c.fillStyle = this.fill;
+        c.stroke();
+        c.fill();
+      }
+
+      this.update = function() {
+        //wall bounces
+        if(this.x + this.radius > width || this.x - this.radius < 0)
+          this.dx = -this.dx;
+        if(this.y + this.radius > height || this.y - this.radius < 0)
+          this.dy = -this.dy;
+
+        let distance = Math.sqrt((mouse.x-this.x)*(mouse.x-this.x)+(mouse.y-this.y)*(mouse.y-this.y))
+        if(distance < this.radius){
+          this.radius++
+        } 
+
+        this.x += this.dx;
+        this.y += this.dy;
+
+        this.draw();
+      }
+    }
+    let randoRgbaTemplate = function() {
+      let r = Math.random() * 255;
+      let g = Math.random() * 255;
+      let b = Math.random() * 255;
+      let a = Math.random();
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    //generating randomized circles
+    //creates an array that will get spread out in the Circle call below
+    let randoC = function(w,h) {
+      let out = [];
+      let speedMult = 3;
+      let r = Math.max(Math.random() * 30, 5);
+      out.push(Math.min(Math.max(Math.random() * w, r + 1), w - r));
+      out.push(Math.min(Math.max(Math.random() * h, r + 1), h - r));
+      out.push((Math.random() - 0.5) * speedMult);
+      out.push((Math.random() - 0.5) * speedMult);
+      out.push(r);
+      out.push(randoRgbaTemplate());
+      out.push(randoRgbaTemplate());
+
+      return out;
+    }
+
+    let circleArray = [];
+    for(let i = 0; i < 10; i++) {
+      circleArray.push(new Circle(...randoC(width,height)));
+    }
+
+    //our actual animate loop
+    const animate = function() {
+      requestAnimationFrame(animate);
+      c.clearRect(0,0,width,height);
+
+      for(let circle of circleArray) {
+        circle.update(); 
+      }
+
+    }
+    animate();
+
+
+  }
+
 }
