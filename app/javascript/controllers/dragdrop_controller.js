@@ -37,15 +37,14 @@ static targets = [
         if(mouse.y > rect.height)
           mouse.y = -1;
       })
-
-    ctx.font="48px righteous";
-    ctx.lineWidth = 3;
     
     //divider x-coord
     let barX = width * .8;
 
     //Drag and drop Objects
-    function Connection() {
+    function Connection(x,y) {
+      this.x = x;
+      this.y = y;
 
       this.draw = function() {
 
@@ -55,8 +54,34 @@ static targets = [
 
         this.draw();
       }
+    }
 
+    function Rackroom(x,y) {
+      this.x = x;
+      this.y = y;
 
+      this.draw = function() {
+
+      }
+
+      this.update = function() {
+
+        this.draw();
+      }
+    }
+
+    //set some ctx baselines
+    ctx.font="48px righteous";
+    ctx.lineWidth = 2;
+
+    //set sizes
+    let itemw = width * .2;
+    let itemh = height * .2;
+
+    //menu script
+    const bar = function(x,y,w,h) {
+      ctx.fillRect(x, y, w, h)
+      ctx.strokeRect(x, y, w, h)
     }
 
     //our actual animate loop
@@ -64,22 +89,19 @@ static targets = [
       requestAnimationFrame(animate);
       ctx.clearRect(0,0,width,height);
 
-
+      //draw menu separator
       ctx.beginPath()
       ctx.moveTo(barX,0);
       ctx.lineTo(barX,height);
       ctx.stroke();
 
+      //draw right-hand menu
       ctx.fillStyle = "#777777";
-      ctx.fillRect(barX + 2, 0, width * .2, height * .2)
-      ctx.strokeRect(barX + 2, 0, width * .2, height * .2)
+      for(let k = 0; k < 3; k++) {
+        bar(barX, itemh * k, itemw, itemh)
+      }
 
-      ctx.fillRect(barX + 2, height * .2, width * .2, height * .2)
-      ctx.strokeRect(barX + 2, height * .2, width * .2, height * .2)
-
-      ctx.fillRect(barX + 2, height * .4, width * .2, height * .2)
-      ctx.strokeRect(barX + 2, height * .4, width * .2, height * .2)
-
+      //only draw the mousex,mousey if it's in the canvas area
       if(mouse.x != undefined && mouse.x > -1 && mouse.y > -1) {
         ctx.fillStyle = "#000000";
         ctx.fillText(`${mouse.x},${mouse.y}`, Math.floor(width * .84), Math.floor(height * .9));
