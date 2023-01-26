@@ -206,20 +206,19 @@ static targets = [
     const c = this.canvasTarget.getContext("2d");
     var width = this.canvasTarget.width;
     var height = this.canvasTarget.height;
-
-    //offset for distance from top of window to top of canvas, corrects mouse y coordinate
-    let cOffset = window.pageYOffset + this.canvasTarget.getBoundingClientRect().top;
-
-    //mouse tracking and adjustment to canvas coords
+    let rect = this.canvasTarget.getBoundingClientRect();
     let mouse = {
       x: undefined,
       y: undefined
     }
-
     window.addEventListener('mousemove',
       function(event) {
-        mouse.x = event.x;
-        mouse.y = event.y - cOffset;
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;
+        if(mouse.x > rect.width)
+          mouse.x = -1;
+        if(mouse.y > rect.height)
+          mouse.y = -1;
       })
 
     //Circle Object manages itself entirely with calls to update()
@@ -264,7 +263,8 @@ static targets = [
         this.y += this.dy;
 
         // interactivity
-        if(Math.sqrt((mouse.x-this.x)*(mouse.x-this.x)+(mouse.y-this.y)*(mouse.y-this.y)) < this.radius && this.inside(width, height)) {
+        let distance = Math.sqrt((mouse.x-this.x)*(mouse.x-this.x)+(mouse.y-this.y)*(mouse.y-this.y))
+        if(distance < this.radius && this.inside(width, height)) {
           this.radius += 1;
         }
 
@@ -315,7 +315,7 @@ static targets = [
     animate();
   }
 
-  nervousCircles() {
+  trailCircles() {
     const c = this.canvasTarget.getContext("2d");
     let width = this.canvasTarget.width;
     let height = this.canvasTarget.height;
@@ -346,6 +346,15 @@ static targets = [
       this.stroke = stroke;
       this.fill = fill;
 
+      this.blank = function() {
+        this.radius = 0;
+        this.stroke = "";
+        this.fill = "";
+        this.lifetime = -1;
+        this.dx = 0;
+        this.dy = 0;
+      }
+
       this.draw = function() {
         c.beginPath();
         c.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
@@ -355,17 +364,16 @@ static targets = [
         c.fill();
       }
 
-      this.update = function() {
+      this.update = function(time) {
         //wall bounces
         if(this.x + this.radius > width || this.x - this.radius < 0)
           this.dx = -this.dx;
         if(this.y + this.radius > height || this.y - this.radius < 0)
-          this.dy = -this.dy;
+          this.dy = -Math.max(1,this.dy * .8);
 
-        let distance = Math.sqrt((mouse.x-this.x)*(mouse.x-this.x)+(mouse.y-this.y)*(mouse.y-this.y))
-        if(distance < this.radius){
-          this.radius++
-        } 
+        if(time % 2 == 0) {
+          this.dy++;
+        }
 
         this.x += this.dx;
         this.y += this.dy;
@@ -373,8 +381,9 @@ static targets = [
         this.draw();
       }
     }
+
     let randoRgbaTemplate = function() {
-      let r = Math.random() * 255;
+      let r = Math.random() * 100;
       let g = Math.random() * 255;
       let b = Math.random() * 255;
       let a = Math.random();
@@ -383,12 +392,12 @@ static targets = [
 
     //generating randomized circles
     //creates an array that will get spread out in the Circle call below
-    let randoC = function(w,h) {
+    let randoC = function() {
       let out = [];
       let speedMult = 3;
-      let r = Math.max(Math.random() * 30, 5);
-      out.push(Math.min(Math.max(Math.random() * w, r + 1), w - r));
-      out.push(Math.min(Math.max(Math.random() * h, r + 1), h - r));
+      let r = Math.max(Math.random() * 20, 5);
+      out.push(mouse.x);
+      out.push(mouse.y);
       out.push((Math.random() - 0.5) * speedMult);
       out.push((Math.random() - 0.5) * speedMult);
       out.push(r);
@@ -398,20 +407,31 @@ static targets = [
       return out;
     }
 
+    let time = 0;
+    let frequency = 20;
     let circleArray = [];
-    for(let i = 0; i < 10; i++) {
-      circleArray.push(new Circle(...randoC(width,height)));
-    }
+
+    canvas.addEventListener("mouseover", () => {
+      console.log("mouseover");
+      circleArray.push(new Circle(...randoC()));
+    })
 
     //our actual animate loop
     const animate = function() {
       requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
 
-      for(let circle of circleArray) {
-        circle.update(); 
-      }
+      time < 5 ? time++ : time = 0;
 
+      if(time == 3 && mouse.x > 0 && mouse.y > 0) {
+        circleArray.push(new Circle(...randoC()));
+        if(circleArray.length > 20) circleArray.shift();
+      }
+      
+
+      for(let circle of circleArray) {  
+        circle.update(time); 
+      }
     }
     animate();
 
