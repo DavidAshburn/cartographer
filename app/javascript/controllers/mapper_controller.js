@@ -315,6 +315,7 @@ static targets = [
     animate();
   }
 
+  //bug: spawns a circle at top of screen on mouseover from the bottom edge
   trailCircles() {
     const c = this.canvasTarget.getContext("2d");
     let width = this.canvasTarget.width;
@@ -365,15 +366,16 @@ static targets = [
       }
 
       this.update = function(time) {
+        //gravity
+        if(time % 5 == 0) {
+          this.dy++;
+        }
+
         //wall bounces
         if(this.x + this.radius > width || this.x - this.radius < 0)
           this.dx = -this.dx;
         if(this.y + this.radius > height || this.y - this.radius < 0)
           this.dy = -Math.max(1,this.dy * .8);
-
-        if(time % 2 == 0) {
-          this.dy++;
-        }
 
         this.x += this.dx;
         this.y += this.dy;
@@ -399,7 +401,7 @@ static targets = [
       out.push(mouse.x);
       out.push(mouse.y);
       out.push((Math.random() - 0.5) * speedMult);
-      out.push((Math.random() - 0.5) * speedMult);
+      out.push(Math.random() * speedMult * -1);
       out.push(r);
       out.push(randoRgbaTemplate());
       out.push(randoRgbaTemplate());
@@ -408,7 +410,6 @@ static targets = [
     }
 
     let time = 0;
-    let frequency = 20;
     let circleArray = [];
 
     canvas.addEventListener("mouseover", () => {
@@ -417,13 +418,14 @@ static targets = [
     })
 
     //our actual animate loop
+    //will only add circles if the x and y > 1
     const animate = function() {
       requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
 
-      time < 5 ? time++ : time = 0;
+      time < 60 ? time++ : time = 0;
 
-      if(time == 3 && mouse.x > 0 && mouse.y > 0) {
+      if(time % 10 == 0 && mouse.x > 1 && mouse.y > 1) {
         circleArray.push(new Circle(...randoC()));
         if(circleArray.length > 20) circleArray.shift();
       }
