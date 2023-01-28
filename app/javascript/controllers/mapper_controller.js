@@ -412,11 +412,6 @@ static targets = [
     let time = 0;
     let circleArray = [];
 
-    canvas.addEventListener("mouseover", () => {
-      console.log("mouseover");
-      circleArray.push(new Circle(...randoC()));
-    })
-
     //our actual animate loop
     //will only add circles if the x and y > 1
     const animate = function() {
