@@ -57,6 +57,7 @@ static targets = [
       for(let i = 0; i < 1; i++) {
         let x = Math.random() * window.innerWidth;
         let y = Math.random() * (window.innerHeight * .6);
+        c.lineWidth = Math.max(Math.random() * 10, 2);
 
         let radius = Math.random() * 100;
         let style = `rgba(${Math.random() * 50},${Math.random() * 255},${Math.random() * 255},${Math.random()})`;
@@ -126,10 +127,19 @@ static targets = [
     for(let i = 0; i < 200; i++) {
       circleArray.push(new Circle(...randoC(width,height)));
     }
+    let time = 0;
+    let diff = 2;
+    c.lineWidth = diff;
 
     const animate = function() {
       requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
+
+      time < 60 ? time++ : time = 0;
+      if(time % 5 == 0) {
+        diff = (Math.random() * 6) - 3;
+        c.lineWidth < 20 ? c.lineWidth += diff : c.lineWidth -= 2;
+      }
 
       for(let circle of circleArray) {
         circle.update(); 
@@ -367,6 +377,5 @@ static targets = [
       }
     }
     animate();
-
-
-	  }
+	}
+}
