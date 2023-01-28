@@ -44,6 +44,54 @@ export default class extends Controller {
     }
   }
 
+  paintFaster() {
+    const c = this.canvasTarget.getContext("2d");
+    var width = this.canvasTarget.width;
+    var height = this.canvasTarget.height;
+    var time = 0;
+
+    function drawCircle(x,y,radius,style) {
+      let c = canvas.getContext("2d");
+      c.beginPath();
+      c.arc(x,y,radius,0,Math.PI * 2,false);
+      c.strokeStyle = style;
+      c.stroke();
+    }
+
+    function fillCircle(x,y,radius,style) {
+      let c = canvas.getContext("2d");
+      c.beginPath();
+      c.arc(x,y,radius,0,Math.PI * 2,false);
+      c.fillStyle = style;
+      c.fill();
+    }
+    
+    function paintCircles() {
+      for(let i = 0; i < 150; i++) {
+        let x = Math.random() * window.innerWidth;
+        let y = Math.random() * (window.innerHeight * .6);
+        let r = Math.random() * 200;
+        let g = Math.random() * 255;
+        let b = Math.random() * 255;
+        let a = Math.random();
+        let radius = Math.random() * 100;
+        let style = `rgba(${r},${g},${b},${a})`;
+        if(i%4==0) {
+          drawCircle(x,y,radius,style);
+        } else {
+          fillCircle(x,y,radius,style);
+        }
+      }
+    }
+
+    const animate = function() {
+      requestAnimationFrame(animate);
+      time < 60 ? time++ : time = 0;
+      if(time % 30 == 0) paintCircles();
+    }
+    animate();
+  }
+
   driver() {
     const ctx = this.canvasTarget.getContext("2d");
     var width = this.canvasTarget.width;
