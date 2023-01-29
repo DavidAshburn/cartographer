@@ -151,7 +151,7 @@ static targets = [
       circleArray.push(new Circle(...randoC(width,height)));
     }
     let time = 0;
-    let diff = 2;
+    let diff = 1;
     c.lineWidth = diff;
 
     const animate = function() {
@@ -159,9 +159,9 @@ static targets = [
       c.clearRect(0,0,width,height);
 
       time < 60 ? time++ : time = 0;
-      if(time % 5 == 0) {
-        diff = (Math.random() * 6) - 3;
-        c.lineWidth < 20 ? c.lineWidth += diff : c.lineWidth -= 2;
+      if(time % 4 == 0) {
+        diff = (Math.random() * 4) - 2;
+        c.lineWidth < 15 ? c.lineWidth += diff : c.lineWidth -= 2;
       }
 
       for(let circle of circleArray) {
@@ -174,6 +174,7 @@ static targets = [
 
   growingCircles() {
     let c = this.canvasTarget.getContext("2d");
+    c.lineWidth = 2;
     var width = this.canvasTarget.width;
     var height = this.canvasTarget.height;
     let rect = this.canvasTarget.getBoundingClientRect();
@@ -292,6 +293,7 @@ static targets = [
 
 	trailCircles() {
     let c = this.canvasTarget.getContext("2d");
+    c.lineWidth = 1;
     let width = this.canvasTarget.width;
     let height = this.canvasTarget.height;
     let rect = this.canvasTarget.getBoundingClientRect();
@@ -326,15 +328,6 @@ static targets = [
       this.radius = radius;
       this.stroke = stroke;
       this.fill = fill;
-
-      this.blank = function() {
-        this.radius = 0;
-        this.stroke = "";
-        this.fill = "";
-        this.lifetime = -1;
-        this.dx = 0;
-        this.dy = 0;
-      }
 
       this.draw = function() {
         c.beginPath();
