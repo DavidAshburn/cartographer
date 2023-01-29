@@ -314,14 +314,14 @@ static targets = [
       this.update = function(time) {
         //gravity
         if(time % 5 == 0) {
-          this.dy++;
+          this.dx--;
         }
 
         //wall bounces
-        if(this.x + this.radius > width || this.x - this.radius < 0)
+        if(this.x + this.radius + this.dx >= width || this.x - this.radius + this.dx <= 0)
           this.dx = -this.dx;
-        if(this.y + this.radius > height || this.y - this.radius < 0)
-          this.dy = -Math.max(1,this.dy * .8);
+        if(this.y + this.radius + this.dy >= height || this.y - this.radius + this.dy <= 0)
+          this.dy = -this.dy * .8
 
         this.x += this.dx;
         this.y += this.dy;
@@ -368,7 +368,7 @@ static targets = [
 
       if(time % 10 == 0 && mouse.x > 1 && mouse.y > 1) {
         circleArray.push(new Circle(...randoC()));
-        if(circleArray.length > 20) circleArray.shift();
+        if(circleArray.length > 30) circleArray.shift();
       }
       
 
