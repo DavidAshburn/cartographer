@@ -34,37 +34,37 @@ export default class extends Controller {
           mouse.y = -1;
       })
 
-    let circleArray = [];
+    let objectArray = [];
 
 
     canvas.addEventListener('mousedown', () => {
-      for(let circle of circleArray) {
-        if(circle.inside()) {
-          circle.hold();
+      for(let object of objectArray) {
+        if(object.inside()) {
+          object.hold();
+          object.xoffset = mouse.x - object.x;
+          object.yoffset = mouse.y - object.y;
         }
       }
     })
     canvas.addEventListener('mousemove', () => {
-      for(let circle of circleArray) {
-        if(circle.held) {
-          circle.update();
-          console.log("hit");
-        }
+      this.clear();
+      for(let object of objectArray) {
+        object.update();
       }
     })
     canvas.addEventListener('mouseup', () => {
-      for(let circle of circleArray) {
-        circle.drop();
+      for(let object of objectArray) {
+        object.drop();
       }
     })
     canvas.addEventListener('mouseout', () => {
-      for(let circle of circleArray) {
-        circle.drop();
+      for(let object of objectArray) {
+        object.drop();
       }
     })
     canvas.addEventListener('mouseenter', () => {
-      for(let circle of circleArray) {
-        circle.drop();
+      for(let object of objectArray) {
+        object.drop();
       }
     })
 
@@ -73,6 +73,8 @@ export default class extends Controller {
       this.y = y;
       this.radius = radius;
       this.held = false;
+      this.xoffset = 0;
+      this.yoffset = 0;
 
       this.hold = function() {
         this.held = true;
@@ -92,8 +94,8 @@ export default class extends Controller {
 
       this.update = function() {
         if(this.held && mouse.x > 0 && mouse.y > 0) {
-          this.x = mouse.x;
-          this.y = mouse.y;
+          this.x = mouse.x - this.xoffset;
+          this.y = mouse.y - this.yoffset;
         }
         this.draw();
       }
@@ -107,8 +109,9 @@ export default class extends Controller {
       }
     }
 
-    circleArray.push(new Circle(100,100,50));
-    for(let item of circleArray) {
+    objectArray.push(new Circle(100,100,50));
+    objectArray.push(new Circle(200,200,20));
+    for(let item of objectArray) {
       item.update();
     }
 
