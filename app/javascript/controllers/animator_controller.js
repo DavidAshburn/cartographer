@@ -15,6 +15,10 @@ static targets = [
     let c = this.canvasTarget.getContext("2d");
     c.beginPath();
     c.clearRect(0,0,this.canvasTarget.width,this.canvasTarget.height);
+
+    if(this.aniHandle) {
+      cancelAnimationFrame(this.aniHandle);
+    }
   }
 
   dvdCircle() {
