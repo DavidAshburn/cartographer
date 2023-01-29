@@ -8,6 +8,7 @@ static targets = [
   connect() {
     this.canvasTarget.width = window.innerWidth;
     this.canvasTarget.height = Math.floor(window.innerHeight * .6);
+    this.aniHandle;
   }
 
   clear() {
@@ -17,7 +18,7 @@ static targets = [
   }
 
   dvdCircle() {
-    const c = this.canvasTarget.getContext("2d");
+    let c = this.canvasTarget.getContext("2d");
     var width = this.canvasTarget.width;
     var height = this.canvasTarget.height;
     
@@ -27,8 +28,17 @@ static targets = [
     var dx = (Math.random() - 0.5) * 5;
     var dy = (Math.random() - 0.5) * 5;
 
+    //clear any previous animation on animator_controller
+    if(this.aniHandle) {
+      cancelAnimationFrame(this.aniHandle);
+      this.clear();
+    }
+
+    //we'll access this via closure to get 'this.aniHandle' into animate()
+    var self = this;
+
     const animate = function() {
-      requestAnimationFrame(animate);
+      self.aniHandle = requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
 
       c.beginPath();
@@ -45,14 +55,21 @@ static targets = [
       y += dy;
 
     }
-    animate();
+    //assigning this variable calls the next frame
+    this.aniHandle = requestAnimationFrame(animate);
   }
 
   fillBubbles() {
-    const c = this.canvasTarget.getContext("2d");
+    let c = this.canvasTarget.getContext("2d");
+
+    if(this.aniHandle) {
+      cancelAnimationFrame(this.aniHandle);
+      this.clear();
+    }
+    var self = this;
 
     const animate = function() {
-      requestAnimationFrame(animate);
+      self.aniHandle = requestAnimationFrame(animate);
 
       for(let i = 0; i < 1; i++) {
         let x = Math.random() * window.innerWidth;
@@ -75,13 +92,19 @@ static targets = [
       }
     }
     
-    animate();
+    this.aniHandle = requestAnimationFrame(animate);
   }
 
   movingCircles() {
-    const c = this.canvasTarget.getContext("2d");
+    let c = this.canvasTarget.getContext("2d");
     var width = this.canvasTarget.width;
     var height = this.canvasTarget.height;
+
+    if(this.aniHandle) {
+      cancelAnimationFrame(this.aniHandle);
+      this.clear();
+    }
+    var self = this;
     
     function Circle(x, y, dx, dy, radius) {
       this.x = x;
@@ -132,7 +155,7 @@ static targets = [
     c.lineWidth = diff;
 
     const animate = function() {
-      requestAnimationFrame(animate);
+      self.aniHandle = requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
 
       time < 60 ? time++ : time = 0;
@@ -146,11 +169,11 @@ static targets = [
       }
 
     }
-    animate();
+    this.aniHandle = requestAnimationFrame(animate);
   }
 
   growingCircles() {
-    const c = this.canvasTarget.getContext("2d");
+    let c = this.canvasTarget.getContext("2d");
     var width = this.canvasTarget.width;
     var height = this.canvasTarget.height;
     let rect = this.canvasTarget.getBoundingClientRect();
@@ -167,6 +190,11 @@ static targets = [
         if(mouse.y > rect.height)
           mouse.y = -1;
       })
+    if(this.aniHandle) {
+      cancelAnimationFrame(this.aniHandle);
+      this.clear();
+    }
+    var self = this;
 
     //Circle Object manages itself entirely with calls to update()
     function Circle(x, y, dx, dy, radius, stroke, fill) {
@@ -251,7 +279,7 @@ static targets = [
 
     //our actual animate loop
     const animate = function() {
-      requestAnimationFrame(animate);
+      self.aniHandle = requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
 
       for(let circle of circleArray) {
@@ -259,11 +287,11 @@ static targets = [
       }
 
     }
-    animate();
+    this.aniHandle = requestAnimationFrame(animate);
   }
 
 	trailCircles() {
-    const c = this.canvasTarget.getContext("2d");
+    let c = this.canvasTarget.getContext("2d");
     let width = this.canvasTarget.width;
     let height = this.canvasTarget.height;
     let rect = this.canvasTarget.getBoundingClientRect();
@@ -282,6 +310,12 @@ static targets = [
         if(mouse.y > rect.height)
           mouse.y = -1;
       })
+
+    if(this.aniHandle) {
+      cancelAnimationFrame(this.aniHandle);
+      this.clear();
+    }
+    var self = this;
 
     //Circle Object manages itself entirely with calls to update()
     function Circle(x, y, dx, dy, radius, stroke, fill) {
@@ -314,14 +348,15 @@ static targets = [
       this.update = function(time) {
         //gravity
         if(time % 5 == 0) {
-          this.dx--;
+          this.dy++;
         }
 
         //wall bounces
+        //accounting for radius and future movement prevents circles from piercing the walls and stalling out
         if(this.x + this.radius + this.dx >= width || this.x - this.radius + this.dx <= 0)
-          this.dx = -this.dx;
+          this.dx = -this.dx * .8;
         if(this.y + this.radius + this.dy >= height || this.y - this.radius + this.dy <= 0)
-          this.dy = -this.dy * .8
+          this.dy = -this.dy * .8;
 
         this.x += this.dx;
         this.y += this.dy;
@@ -333,7 +368,7 @@ static targets = [
     let randoRgbaTemplate = function() {
       let r = Math.random() * 100;
       let g = Math.random() * 255;
-      let b = Math.random() * 255;
+      let b = Math.random() * 200;
       let a = Math.random();
       return `rgba(${r},${g},${b},${a})`;
     }
@@ -361,7 +396,7 @@ static targets = [
     //our actual animate loop
     //will only add circles if the x and y > 1
     const animate = function() {
-      requestAnimationFrame(animate);
+      self.aniHandle = requestAnimationFrame(animate);
       c.clearRect(0,0,width,height);
 
       time < 60 ? time++ : time = 0;
@@ -376,6 +411,6 @@ static targets = [
         circle.update(time); 
       }
     }
-    animate();
+    this.aniHandle = requestAnimationFrame(animate);
 	}
 }
