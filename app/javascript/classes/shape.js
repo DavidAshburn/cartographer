@@ -64,8 +64,8 @@ export class Rectangle extends Shape {
 
   update(x,y,c) {
     if(this.held && x > 0 && y > 0) {
-      this.x = this.clamp(x - this.xoffset,this.width / 2,canvas.width - this.width / 2);
-      this.y = this.clamp(y - this.yoffset,this.height / 2,canvas.height - this.height / 2);
+      this.x = this.clamp(x - this.xoffset,1,canvas.width - this.width);
+      this.y = this.clamp(y - this.yoffset,1,canvas.height - this.height);
     }
     this.draw(c);
   }
