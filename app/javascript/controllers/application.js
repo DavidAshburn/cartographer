@@ -1,5 +1,4 @@
 import { Application } from "@hotwired/stimulus"
-import "classes/circle"
 
 const application = Application.start()
 
