@@ -65,13 +65,24 @@ export default class extends Controller {
           self.mouse.y = -1;
       })
 
-    this.objectArray.push(new Circle(100,100,50));
-    this.objectArray.push(new Circle(200,200,20));
-    this.objectArray.push(new Rectangle(300,300,200,100))
     for(let item of this.objectArray) {
       item.update(this.mouse.x,this.mouse.y,this.c);
     }
 
+  }
+
+  spawnCircle() {
+    this.objectArray.push(new Circle(100,100,50));
+    for(let item of this.objectArray) {
+      item.update(this.mouse.x,this.mouse.y,this.c);
+    }
+  }
+
+  spawnSquare() {
+    this.objectArray.push(new Rectangle(100,100,80,80));
+    for(let item of this.objectArray) {
+      item.update(this.mouse.x,this.mouse.y,this.c);
+    }
   }
 
   clear() {
