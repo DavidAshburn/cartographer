@@ -73,6 +73,7 @@ export class Rectangle extends Shape {
       this.y = this.clamp(y - this.yoffset,1,canvas.height - this.height);
     }
     this.draw(c);
+    this.showNodes(c);
   }
 
   inside(x,y) {
@@ -81,6 +82,28 @@ export class Rectangle extends Shape {
     if(y < this.y || y > this.y + this.height)
       return false;
     return true;
+  }
+
+  showNodes(c) {
+    c.lineWidth = 2;
+    if(this.children.left < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x - 20,this.y + this.height + 30,15,0,Math.PI * 2,false);
+      c.stroke();
+    }
+    if(this.children.bottom < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x + this.width/2,this.y + this.height + 30,15,0,Math.PI * 2,false);
+      c.stroke();
+    }
+    if(this.children.right < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x +this.width + 20,this.y + this.height + 30,15  ,0,Math.PI * 2,false);
+      c.stroke();
+    }
   }
 }
 
@@ -118,6 +141,7 @@ export class Circle extends Shape {
     }
   
     this.draw(c);
+    this.showNodes(c);
   }
 
   inside(x,y) {
@@ -126,6 +150,28 @@ export class Circle extends Shape {
     if(distance < this.radius)
       return true;
     return false;
+  }
+
+  showNodes(c) {
+    c.lineWidth = 2;
+    if(this.children.left < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x - this.radius - 10,this.y + this.radius + 25,15,0,Math.PI * 2,false);
+      c.stroke();
+    }
+    if(this.children.bottom < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x,this.y + this.radius + 25,15,0,Math.PI * 2,false);
+      c.stroke();
+    }
+    if(this.children.right < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x + this.radius + 10,this.y + this.radius + 25,15  ,0,Math.PI * 2,false);
+      c.stroke();
+    }
   }
 }
 
@@ -154,6 +200,7 @@ export class Triangle extends Shape {
       this.y = this.clamp(y - this.yoffset,1 + this.height,canvas.height - 1);
     }
     this.draw(c);
+    this.showNodes(c);
   }
 
   //checking if mouse falls under the line y=-2x+height based on coordinate system origin in center of bottom side
@@ -168,5 +215,27 @@ export class Triangle extends Shape {
 
     if (Math.abs(mx) * -(this.height / (this.width / 2)) + this.height >= this.y - y) return true;
     return false;
+  }
+
+  showNodes(c) {
+    c.lineWidth = 2;
+    if(this.children.left < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x - 10,this.y + 30,15,0,Math.PI * 2,false);
+      c.stroke();
+    }
+    if(this.children.bottom < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x + this.width/2,this.y + 30,15,0,Math.PI * 2,false);
+      c.stroke();
+    }
+    if(this.children.right < 0) {
+      c.beginPath();
+      c.strokeStyle = "#888888";
+      c.arc(this.x +this.width + 10,this.y + 30,15  ,0,Math.PI * 2,false);
+      c.stroke();
+    }
   }
 }
