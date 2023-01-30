@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { Circle } from "classes/circle"
+import { Rectangle } from "classes/rectangle"
 
 export default class extends Controller {
   static targets = [ 
@@ -37,7 +38,6 @@ export default class extends Controller {
 
     let objectArray = [];
 
-
     canvas.addEventListener('mousedown', () => {
       for(let object of objectArray) {
         if(object.inside(mouse.x,mouse.y)) {
@@ -71,6 +71,7 @@ export default class extends Controller {
 
     objectArray.push(new Circle(100,100,50));
     objectArray.push(new Circle(200,200,20));
+    objectArray.push(new Rectangle(300,300,30,40))
     for(let item of objectArray) {
       item.update(mouse.x,mouse.y,c);
     }
