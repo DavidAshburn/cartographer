@@ -12,7 +12,7 @@ export class Shape {
       else
         this.stroke = stroke;
 
-      if(!fill)
+      if(!fill) 
         this.fill = this.randomRgba();
       else 
         this.fill = fill;
@@ -130,9 +130,13 @@ export class Triangle extends Shape {
 
   draw(c) {
     c.beginPath();
-    c.moveTo(this.x,this.y)
+    c.strokeStyle = this.stroke;
+    c.fillStyle = this.fill;
+    c.lineWidth = this.line_width;
+    c.moveTo(this.x,this.y);
     c.lineTo(this.x+this.width/2,this.y-this.height);
     c.lineTo(this.x+this.width,this.y);
+    c.lineTo(this.x,this.y);
     c.stroke();
     c.fill();
   }
@@ -145,22 +149,17 @@ export class Triangle extends Shape {
     this.draw(c);
   }
 
+  //checking if mouse falls under the line y=-2x+height based on coordinate system origin in center of bottom side
   inside(x,y) {
-    if(x < this.x || x > this.x + this.width) {
-      console.log("xfail");
+    if(x < this.x || x > this.x + this.width)
       return false;
-    }
-    if(y > this.y || y < this.y - this.height) {
-      console.log("yfail");
+
+    if(y > this.y || y < this.y - this.height)
       return false;
-    }
+
     let mx = x - this.x - (this.width / 2);
-    let my = this.y - y;
 
-    console.log(`${mx}, ${my}, ${x}, ${y}`);
-
-    if (Math.abs(mx) * 2 <= my) return true;
-    console.log("oops");
+    if (Math.abs(mx) * -2 + this.height >= this.y - y) return true;
     return false;
   }
 }
