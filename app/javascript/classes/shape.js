@@ -1,6 +1,6 @@
 export class Shape {
 
-  constructor(x,y,width,height,line_width = 3,stroke = "#ef4444",fill = "#fca5a5") {
+  constructor(index,x,y,width,height,line_width = 3,stroke = "#ef4444",fill = "#fca5a5") {
       this.x = x;
       this.y = y;
       this.width = width;
@@ -12,6 +12,12 @@ export class Shape {
       this.selected = false;
       this.xoffset = 0;
       this.yoffset = 0;
+      this.children = {
+        left:-1,
+        bottom:-1,
+        right:-1
+      };
+      this.index = index;
     }
 
   hold() {
@@ -79,20 +85,25 @@ export class Rectangle extends Shape {
 }
 
 export class Circle extends Shape {
-  constructor(x,y,radius,line_width = 3,stroke = "#ef4444",fill = "#fca5a5") {
-    super(x,y,stroke,fill);
+  constructor(index,x,y,radius,line_width = 3,stroke = "#ef4444",fill = "#fca5a5") {
+    super(index,x,y,stroke,fill);
     this.radius = radius;
     this.line_width = line_width;
     this.held = false;
     this.selected = false;
     this.xoffset = 0;
     this.yoffset = 0;
+    this.children = {
+        left:-1,
+        bottom:-1,
+        right:-1
+      };
   }
+
   draw(c) {
     c.beginPath();
     c.strokeStyle = this.stroke;
     if(this.selected) c.strokeStyle = "#16a34a";
-    
     c.fillStyle = this.fill;
     c.lineWidth = this.line_width;
     c.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);

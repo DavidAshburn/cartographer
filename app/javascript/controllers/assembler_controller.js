@@ -31,6 +31,7 @@ export default class extends Controller {
           object.select();
           object.xoffset = this.mouse.x - object.x;
           object.yoffset = this.mouse.y - object.y;
+          console.log(object.index);
         } else object.deselect();
       }
     })
@@ -73,21 +74,21 @@ export default class extends Controller {
   }
 
   spawnCircle() {
-    this.objectArray.push(new Circle(100,100,50));
+    this.objectArray.push(new Circle(this.objectArray.length,100,100,50));
     for(let item of this.objectArray) {
       item.update(this.mouse.x,this.mouse.y,this.c);
     }
   }
 
   spawnSquare() {
-    this.objectArray.push(new Rectangle(100,100,80,80));
+    this.objectArray.push(new Rectangle(this.objectArray.length,100,100,80,80));
     for(let item of this.objectArray) {
       item.update(this.mouse.x,this.mouse.y,this.c);
     }
   }
 
   spawnTriangle() {
-    this.objectArray.push(new Triangle(100,100,160,80));
+    this.objectArray.push(new Triangle(this.objectArray.length,100,100,100,84));
     for(let item of this.objectArray) {
       item.update(this.mouse.x,this.mouse.y,this.c);
     }
