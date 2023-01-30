@@ -23,6 +23,7 @@ export class Shape {
   hold() {
     this.held = true;
   }
+
   drop() {
     this.held = false;
   }
@@ -112,6 +113,54 @@ export class Circle extends Shape {
     let distance = Math.sqrt((x-this.x)*(x-this.x)+(y-this.y)*(y-this.y))
     if(distance < this.radius)
       return true;
+    return false;
+  }
+}
+
+export class Triangle extends Shape {
+
+  constructor(x,y,width,height,line_width,stroke,fill,held) {
+    super(x,y,line_width,stroke,fill,held);
+
+    this.width = width;
+    this.height = height;
+    this.xoffset = 0;
+    this.yoffset = 0;
+  }
+
+  draw(c) {
+    c.beginPath();
+    c.moveTo(this.x,this.y)
+    c.lineTo(this.x+this.width/2,this.y-this.height);
+    c.lineTo(this.x+this.width,this.y);
+    c.stroke();
+    c.fill();
+  }
+
+  update(x,y,c) {
+    if(this.held && x > 0 && y > 0) {
+      this.x = this.clamp(x - this.xoffset,1,canvas.width - this.width);
+      this.y = this.clamp(y - this.yoffset,1 + this.height,canvas.height - 1);
+    }
+    this.draw(c);
+  }
+
+  inside(x,y) {
+    if(x < this.x || x > this.x + this.width) {
+      console.log("xfail");
+      return false;
+    }
+    if(y > this.y || y < this.y - this.height) {
+      console.log("yfail");
+      return false;
+    }
+    let mx = x - this.x - (this.width / 2);
+    let my = this.y - y;
+
+    console.log(`${mx}, ${my}, ${x}, ${y}`);
+
+    if (Math.abs(mx) * 2 <= my) return true;
+    console.log("oops");
     return false;
   }
 }

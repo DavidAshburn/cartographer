@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-import { Rectangle, Circle } from "classes/shape"
+import { Rectangle, Circle, Triangle } from "classes/shape"
 
 export default class extends Controller {
   static targets = [ 
@@ -85,10 +85,22 @@ export default class extends Controller {
     }
   }
 
+  spawnTriangle() {
+    this.objectArray.push(new Triangle(100,100,80,80));
+    for(let item of this.objectArray) {
+      item.update(this.mouse.x,this.mouse.y,this.c);
+    }
+  }
+
   clear() {
-    let c = this.canvasTarget.getContext("2d");
-    c.beginPath();
-    c.clearRect(0,0,this.canvasTarget.width,this.canvasTarget.height);
+    this.c.beginPath();
+    this.c.clearRect(0,0,this.canvasTarget.width,this.canvasTarget.height);
+  }
+
+  erase() {
+    this.objectArray = [];
+    this.c.beginPath();
+    this.c.clearRect(0,0,this.canvasTarget.width,this.canvasTarget.height);
   }
 
 }
