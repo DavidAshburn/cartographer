@@ -1,6 +1,6 @@
 export class Shape {
 
-  constructor(x,y,width,height,line_width=3,stroke="#ef4444",fill="#fca5a5",held=false) {
+  constructor(x,y,width,height,line_width = 3,stroke = "#ef4444",fill = "#fca5a5") {
       this.x = x;
       this.y = y;
       this.width = width;
@@ -8,8 +8,8 @@ export class Shape {
       this.line_width = line_width;
       this.stroke = stroke;
       this.fill = fill;
-      this.held = held;
-
+      this.held = false;
+      this.selected = false;
       this.xoffset = 0;
       this.yoffset = 0;
     }
@@ -20,6 +20,14 @@ export class Shape {
 
   drop() {
     this.held = false;
+  }
+
+  select() {
+    this.selected = true;
+  }
+
+  deselect() {
+    this.selected = false;
   }
 
   clamp(val, min, max) {
@@ -39,7 +47,10 @@ export class Rectangle extends Shape {
 
   draw(c) {
     c.beginPath();
-    c.strokeStyle = this.stroke;
+    if(this.selected)
+      c.strokeStyle = "#16a34a";
+    else
+      c.strokeStyle = this.stroke;
     c.fillStyle = this.fill;
     c.lineWidth = this.line_width;
     c.strokeRect(this.x,this.y,this.width,this.height);
@@ -66,16 +77,23 @@ export class Rectangle extends Shape {
 }
 
 export class Circle extends Shape {
-  constructor(x,y,radius,line_width,stroke,fill,held=false) {
-    super(x,y,line_width,stroke,fill,held);
+  constructor(x,y,radius,line_width = 3,stroke = "#ef4444",fill = "#fca5a5") {
+    super(x,y,stroke,fill);
     this.radius = radius;
+    this.line_width = line_width;
+    this.held = false;
+    this.selected = false;
+    this.xoffset = 0;
+    this.yoffset = 0;
   }
   draw(c) {
     c.beginPath();
-    c.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
-    c.lineWidth = this.lineWidth;
     c.strokeStyle = this.stroke;
+    if(this.selected) c.strokeStyle = "#16a34a";
+    
     c.fillStyle = this.fill;
+    c.lineWidth = this.line_width;
+    c.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
     c.stroke();
     c.fill();
   }
@@ -85,6 +103,7 @@ export class Circle extends Shape {
       this.x = this.clamp(x - this.xoffset,this.radius,canvas.width - this.radius);
       this.y = this.clamp(y - this.yoffset,this.radius,canvas.height - this.radius);
     }
+  
     this.draw(c);
   }
 
@@ -101,7 +120,10 @@ export class Triangle extends Shape {
 
   draw(c) {
     c.beginPath();
-    c.strokeStyle = this.stroke;
+    if(this.selected)
+      c.strokeStyle = "#16a34a";
+    else
+      c.strokeStyle = this.stroke;
     c.fillStyle = this.fill;
     c.lineWidth = this.line_width;
     c.moveTo(this.x,this.y);
