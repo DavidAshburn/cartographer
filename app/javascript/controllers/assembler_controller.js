@@ -28,9 +28,10 @@ export default class extends Controller {
       for(let object of this.objectArray) {
         if(object.inside(this.mouse.x,this.mouse.y)) {
           object.hold();
+          object.select();
           object.xoffset = this.mouse.x - object.x;
           object.yoffset = this.mouse.y - object.y;
-        }
+        } else object.deselect();
       }
     })
     canvas.addEventListener('mousemove', () => {

@@ -24,10 +24,12 @@ export class Shape {
 
   select() {
     this.selected = true;
+    this.line_width = 8;
   }
 
   deselect() {
     this.selected = false;
+    this.line_width = 3;
   }
 
   clamp(val, min, max) {
