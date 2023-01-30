@@ -1,23 +1,17 @@
 export class Shape {
 
-  constructor(x,y,line_width=2,stroke=false,fill=false,held=false) {
+  constructor(x,y,width,height,line_width=3,stroke="#ef4444",fill="#fca5a5",held=false) {
       this.x = x;
       this.y = y;
+      this.width = width;
+      this.height = height;
+      this.line_width = line_width;
+      this.stroke = stroke;
+      this.fill = fill;
+      this.held = held;
+
       this.xoffset = 0;
       this.yoffset = 0;
-      this.line_width = line_width;
-
-      if(!stroke)
-        this.stroke = this.randomRgba();
-      else
-        this.stroke = stroke;
-
-      if(!fill) 
-        this.fill = this.randomRgba();
-      else 
-        this.fill = fill;
-
-      this.held = held;
     }
 
   hold() {
@@ -42,15 +36,6 @@ export class Shape {
 }
 
 export class Rectangle extends Shape {
-
-  constructor(x,y,width,height,line_width,stroke,fill,held) {
-      super(x,y,line_width,stroke,fill,held);
-
-      this.xoffset = 0;
-      this.yoffset = 0;
-      this.width = width;
-      this.height = height;
-    }
 
   draw(c) {
     c.beginPath();
@@ -81,15 +66,10 @@ export class Rectangle extends Shape {
 }
 
 export class Circle extends Shape {
-
-  constructor(x,y,radius,line_width,stroke,fill,held) {
-      super(x,y,line_width,stroke,fill,held);
-
-      this.xoffset = 0;
-      this.yoffset = 0;
-      this.radius = radius;
-    }
-
+  constructor(x,y,radius,line_width,stroke,fill,held=false) {
+    super(x,y,line_width,stroke,fill,held);
+    this.radius = radius;
+  }
   draw(c) {
     c.beginPath();
     c.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
@@ -119,15 +99,6 @@ export class Circle extends Shape {
 
 export class Triangle extends Shape {
 
-  constructor(x,y,width,height,line_width,stroke,fill,held) {
-    super(x,y,line_width,stroke,fill,held);
-
-    this.width = width;
-    this.height = height;
-    this.xoffset = 0;
-    this.yoffset = 0;
-  }
-
   draw(c) {
     c.beginPath();
     c.strokeStyle = this.stroke;
@@ -137,6 +108,7 @@ export class Triangle extends Shape {
     c.lineTo(this.x+this.width/2,this.y-this.height);
     c.lineTo(this.x+this.width,this.y);
     c.lineTo(this.x,this.y);
+    c.lineTo(this.x+this.width/2,this.y-this.height);
     c.stroke();
     c.fill();
   }
@@ -159,7 +131,7 @@ export class Triangle extends Shape {
 
     let mx = x - this.x - (this.width / 2);
 
-    if (Math.abs(mx) * -2 + this.height >= this.y - y) return true;
+    if (Math.abs(mx) * -(this.height / (this.width / 2)) + this.height >= this.y - y) return true;
     return false;
   }
 }

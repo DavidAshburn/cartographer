@@ -86,7 +86,7 @@ export default class extends Controller {
   }
 
   spawnTriangle() {
-    this.objectArray.push(new Triangle(100,100,80,80));
+    this.objectArray.push(new Triangle(100,100,160,80));
     for(let item of this.objectArray) {
       item.update(this.mouse.x,this.mouse.y,this.c);
     }
